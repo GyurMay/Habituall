@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "start": "nodemon --watch ./middlewares/ --ext js index.js"
+  }
+}
+

@@ -12,7 +12,7 @@ code {
     monospace;
 }
 
-#hamburger-expand-btn{ width: fit-content; }
+#hamburger-expand-btn{ width: fit-content; background-color: white; }
 input[type="radio"] {
   display: none;
 }

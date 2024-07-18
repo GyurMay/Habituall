@@ -98,7 +98,7 @@ input{
     opacity: 1;
   }
 }
-.containter .del-btn:hover, .commentIcon:hover{
+.container-xl .del-btn:hover, .commentIcon:hover{
   scale: 1.67;
   border-radius: 4px;
   background-color: rgba(0,0,0,0.3);
@@ -197,7 +197,7 @@ input{
   margin-right: 50px;
 }
 .sticky{
-  position: fixed;
+  position: fixed !important;
   top: 10px !important;
   margin-right: 50px;
 }

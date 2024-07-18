@@ -83,6 +83,8 @@ passport.isAuthenticated(),
             if(!d) res.status(200).json({error: d});
             return;
           });
+        }else{
+          res.status(200).json(d);
         }
 
       }).catch(error => {

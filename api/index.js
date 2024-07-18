@@ -17,8 +17,11 @@ const commentRoutes = require("./middlewares/routes/commentRoutes");
 const mongoose = require("mongoose");
 const randomString = () => Array.from({length:10}, () => Math.random().toString(36).charAt(2)).join('');
 
+require('dotenv').config();
 
-mongoose.connect('mongodb://127.0.0.1:27017/HabitualDB')
+let dbhost = '127.0.0.1';
+if(process.env.NODE_ENV == "production") dbhost = 'mongo';
+mongoose.connect('mongodb://'+dbhost+':27017/HabitualDB')
     .then(() => {
       console.log('Connected to the database');
     })
@@ -26,7 +29,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/HabitualDB')
       console.log('Connection error:', error);
     });
 
-require('dotenv').config();
 
 //generic template start
 const cors = require('cors');
@@ -61,16 +63,9 @@ app.use(passport.session());
 // add http request logging to help us debug and audit app use
 const logFormat = process.env.NODE_ENV === "production" ? "combined" : "dev";
 app.use(morgan(logFormat));
-
-// for production use, we serve the static react build folder
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../client/build")));
-
-  // all unknown routes should be handed to our react app
-  // app.get("*", function (req, res) {
-  //   res.sendFile(path.join(__dirname, "../client/build", "index.html")); //temp
-  // });
-}
+// app.get("/*", (req,res) => {
+//   res.status(200).sendFile(path.join(__dirname, "../client/build/index.html"));
+// });
 // app.use(express.static(path.join(__dirname, "../client/build")));
 
   // all unknown routes should be handed to our react app
@@ -87,23 +82,13 @@ if (PORT) {
   console.log("===== ERROR ====\nCREATE A .env FILE!\n===== /ERROR ====");
 }
 app.use(["/api/users", "/api/user"], passport.isAuthenticated(), userRoutes);
-
 app.use(['/api/habit', '/api/habits'], passport.isAuthenticated(), habitRoutes);
-
 app.use(['/api/notes', '/api/note'], passport.isAuthenticated(), noteRoutes);
-
 app.use(['/api/comments', '/api/comment'], passport.isAuthenticated(), commentRoutes);
 
 app.post('/api/login',
 passport.authenticate('local'), 
   (req, res) => {
-    // If this function gets called, authentication was successful.
-    // `req.user` contains the authenticated user.
-    
-    /* if(req.user === 'dorjee' && req.password === 'hi'){
-    //   res.json(req.user);
-    } */ 
-    // dropAndLoadHabits(req);
     res.json(req.user)
   });
   
@@ -175,3 +160,13 @@ app.post('/api/logout',
   res.status(200).json({ message: 'Logout successful' });
 });
 
+
+// for production use, we serve the static react build folder
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client/build")));
+
+  // all unknown routes should be handed to our react app
+  app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "../client/build", "index.html")); //temp
+  });
+}

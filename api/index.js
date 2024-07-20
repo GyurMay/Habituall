@@ -13,7 +13,7 @@ const userRoutes = require("./middlewares/routes/userRoutes")
 const habitRoutes = require("./middlewares/routes/habitRoutes");
 const noteRoutes = require("./middlewares/routes/noteRoutes");
 const commentRoutes = require("./middlewares/routes/commentRoutes");
- 
+
 const mongoose = require("mongoose");
 const randomString = () => Array.from({length:10}, () => Math.random().toString(36).charAt(2)).join('');
 
@@ -21,7 +21,9 @@ require('dotenv').config();
 
 let dbhost = '127.0.0.1';
 if(process.env.NODE_ENV == "production") dbhost = 'mongo';
-mongoose.connect('mongodb://'+dbhost+':27017/HabitualDB')
+console.log('trying to connect to '+'mongodb://'+dbhost+':27017/HabitualDB')
+
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => {
       console.log('Connected to the database');
     })
@@ -34,8 +36,6 @@ mongoose.connect('mongodb://'+dbhost+':27017/HabitualDB')
 const cors = require('cors');
 const Users = require("./models/User");
 const Habit = require("./models/Habit");
-const Note = require("./models/Note");
-const Comment = require("./models/Comment");
 
 app.use(cors({
     origin: ["http://localhost:3000", /*"http://"+os.networkInterfaces()['en0'][1].address+":3000"*/],

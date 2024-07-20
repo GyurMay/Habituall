@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createContext } from "react";
+import { backendAPI } from "../clientDotEnv";
 
 const AuthContext = createContext();
 const { Provider } = AuthContext;
@@ -6,7 +7,8 @@ const { Provider } = AuthContext;
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(false);
   const [loading, setLoading] = useState(true); // New loading state
-  let host = 'http://localhost:3001';
+  // let host = 'http://localhost:3001';
+  let host = backendAPI;
   // host = 'http://192.168.1.147:3001'
   // host = "http://"+require("os").networkInterfaces()['en0'][1].address+":3001"; // comment line if not working on separate window
 

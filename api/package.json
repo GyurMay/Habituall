@@ -1,6 +1,9 @@
 {
   "scripts": {
-    "start": "nodemon --watch ./middlewares/ --ext js index.js"
+    "start2": "nodemon --watch ./middlewares/ --ext js index.js",
+    "build": "cd ../client && npm run build",
+    "build-start": "npm run build && nodemon index.js",
+    "start": "nodemon index.js"
   }
 }
 

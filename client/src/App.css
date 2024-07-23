@@ -16,6 +16,9 @@ textarea{
   background-color: transparent;
   color: white !important;
 }
+#textarea{
+  resize: vertical;
+}
 input{
   color: black !important;
 }
@@ -267,4 +270,23 @@ ul[id="allList"] li {
   input{
     color: black;
   }
+}
+@media screen and (max-width:888px) {
+  .calendar{
+    position: relative;
+    right: 0;
+    margin: 0;
+    top: 0 !important;
+  }
+  .habitNotesContainer{
+    width: auto !important;
+  }
+  .habitNote{
+    margin: 0 !important;
+  }
+}
+.habitNote_text{
+  height: auto !important;
+  white-space: preserve;
+  text-align: initial !important;
 }

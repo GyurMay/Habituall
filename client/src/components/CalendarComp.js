@@ -25,6 +25,7 @@ const CalendarComp = props => {
     };
   
     useEffect(() => {
+      if(window.screen.width < 888) return;
       window.addEventListener('scroll', stickify);
   
       return () => {

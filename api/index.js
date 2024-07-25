@@ -171,7 +171,7 @@ const upload = multer({storage: Storage}).single("img");
 app.post('/imageUpload', passport.isAuthenticated(), (req, res) => {
   upload(req, res, (err) => {
     console.log("filemula", req.file)
-    if(req.file === undefined || req.file.size < 100 || req.file.size > 7*10^6) {
+    if(req.file === undefined || req.file.size < 100 || req.file.size > 7*100000) { //7mb max size
       res.status(500).json({error:'no file'});
       return;
     }

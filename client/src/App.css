@@ -290,3 +290,326 @@ ul[id="allList"] li {
   white-space: preserve;
   text-align: initial !important;
 }
+body{
+  font-size: 130%;
+  background-color: #0f0c29;
+  --tileHoverBg: rgba(255,255,255,0.1);
+}
+body > *{
+  color: white;
+}
+
+/* new color change with bg */
+#makeBreakBox, .calendarInfo, #about-box, #allHabits{
+  color: #edf2f4;
+}
+textarea{
+  background-color: transparent;
+  color: white !important;
+}
+#textarea{
+  resize: vertical;
+}
+input{
+  color: black !important;
+}
+.habitNotesContainer input{
+  color: black !important;
+}
+.searchProfile{
+  color: black;
+}
+/* new color change with bg end */
+
+
+.post-it {
+  width: 200px;
+  height: 200px;
+  background: #FFFFA5;
+  font-size: 1.5em;
+  padding: 20px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.06) inset;
+  position: relative;
+  text-align: center;
+}
+
+.post-it .peel {
+ display: none; 
+}
+
+.post-it:hover .peel {
+    display: block;
+    transition: all 1000ms linear;
+} 
+
+.post-it:before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  border-width: 0 40px 40px 0;
+  border-style: solid;
+  border-color: rgba(255,255,255,0.4) rgba(255,255,255,0.4) rgba(0,0,0,0.4) rgba(0,0,0,0.4) ;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
+}
+
+.note_status{
+  border: 3px solid yellow;
+}
+.post-it:hover h2 {
+    display: none;
+}
+
+.habitNotesContainer{
+  width: 500px;
+}
+.selected{
+  border: 5px solid green;
+  animation: pulse 1.2s infinite ease-in-out;
+}
+.habitNote{
+  color: black;
+}
+.habitNote.habitMissed{
+  background: #efb3b3;
+}
+.habitNote.habitDone{
+  background: #bcd8bc;
+}
+
+.habitNote .del-btn{
+  opacity: 0;
+  position: absolute;
+  margin-left: 100px;
+  margin-top: -50px;
+  scale: 1.4;
+  transition: all ease-in-out 0.2s;
+}
+
+.habitNote:hover{
+  .del-btn{
+    margin-left: 140px;
+    opacity: 1;
+  }
+}
+.container-xl .del-btn:hover, .commentIcon:hover{
+  scale: 1.67;
+  border-radius: 4px;
+  background-color: rgba(0,0,0,0.3);
+  box-shadow: 0px 0px 2px black;
+}
+
+.del-btn:hover, .commentIcon:hover{
+  cursor: pointer;
+}
+
+#searchInput{
+  border-radius: 10px;
+  transition: all linear 0.2s;
+  padding: 5px;
+  margin: 20px;
+}
+
+#searchInput:focus{
+  padding: 10px;
+  outline: none;
+}
+
+.searchResultsContainer{
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 10px;
+  margin: 5px;
+} 
+.searchResult{
+  background-color: rbga(0,0,0,0.3);
+  width: 80%;
+  transition: all ease-in-out 0.1s;
+}
+
+.searchResult:hover{
+  background: #777;
+  width: 50%;
+}
+.habitNote{
+  position: relative;
+  z-index: 1;
+}
+
+.habitNote:hover + .commentIcon, .commentIcon:hover{
+    opacity: 1;
+    margin-left: 40px;
+  }
+.commentIcon{
+  position: relative;
+  z-index: 0;
+  top: -60px;
+  left: 450px;
+  width: fit-content;
+  opacity: 0;
+  scale: 2;
+  color: green;
+  transition: all linear 0.2s;
+}
+.commentIcon:hover{
+  scale: 2.2;
+}
+
+.commentDiv{
+  display: block;
+}
+.commentDivDiv{
+  display: flex;
+  grid-gap: 5px;
+  flex-direction: row;
+  padding: 15px 8px;
+}
+.commentDivDiv:hover{
+  background-color: rgba(0,0,0,0.2);
+}
+.commenter{
+  font-weight: 600;
+}
+.commentDate{
+  color: gray;
+  font-weight: 500;
+  font-size: 15px;
+  align-content: center;
+}
+.comment{
+  flex: 3 1 auto;
+  color: black;
+  margin-left: 10px;
+  font-size: 20px;
+  text-align: left;
+  font-family: 'Helvetica';
+}
+.calendar{
+  position: absolute;
+  right: 100px;
+  top: 271px;
+  /* top: 50px; */
+  margin-right: 50px;
+}
+.sticky{
+  position: fixed !important;
+  top: 10px !important;
+  margin-right: 50px;
+}
+
+.react-calendar {
+  height: 400px !important;
+  width: 500px !important;
+/*   background-color: black;
+  color: white; */
+}
+.react-calendar__tile{
+  font-family: helvetica;
+}
+
+.react-calendar__tile *{
+  margin: 3px;
+  padding: 8px;
+  border-radius: 10px;
+}
+.react-calendar__tile--range{
+  background: rgba(255,255,255,0.1) !important;
+}
+.react-calendar__tile:hover > *{
+  background: #8d99ae;
+}
+  
+@keyframes pulse{
+0% {
+    box-shadow: 0 0 0 0 rgba(255,255,255, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(255,255,255, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(255,255,255, 0);
+  }
+}
+.calendarInfo{
+  border: 1px dashed gray;
+  padding: 10px;
+}
+ul[id="allList"] li {
+  justify-content: center;
+}
+.commentDiv{
+  background: rgba(255,255,255,0.9);
+}
+.progressBar{
+  height: 30px;
+  width: 60%;
+  border: 1px solid;
+  /* background: linear-gradient(to right, red 50%, gray 50%); */
+}
+.react-calendar{
+  background-color: var(--tileHoverBg) !important;
+  color: white;
+}
+.react-calendar__tile:enabled:hover, .react-calendar__tile:enabled:focus{
+  background:none !important;
+}
+.react-calendar__tile--range.react-calendar__tile:enabled:hover{
+  background: var(--tileHoverBg) !important;
+}
+#createForm{
+  color: white;
+  input{
+    color: black;
+  }
+}
+@media screen and (max-width:888px) {
+  .calendar{
+    position: relative;
+    right: 0;
+    margin: 0;
+    top: 0 !important;
+  }
+  .habitNotesContainer{
+    width: auto !important;
+  }
+  .habitNote{
+    margin: 0 !important;
+  }
+}
+.habitNote_text{
+  height: auto !important;
+  white-space: preserve;
+  text-align: initial !important;
+}
+.editPic{
+  position: absolute;
+  z-index: 2;
+  background: black;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  display: none; 
+  transition-delay: 1s;
+  transition: all ease-in-out 0.3s;
+}
+
+.profilePicImg{
+  position: absolute;
+  z-index: 1;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+#profilePic{
+   position: relative;
+  width: 200px; 
+  height: 200px;
+  border: 1px solid #000;
+}
+#profilePic:hover > .editPic{
+    display: block;
+  transform: translate(-50%,-50%);
+}
+.editNoteBtn{
+  
+}

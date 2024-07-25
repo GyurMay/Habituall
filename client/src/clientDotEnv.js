@@ -1,1 +1,1 @@
-export const backendAPI = false ? "http://localhost:3001" : "";
+export const backendAPI = true ? "http://localhost:3001" : "";

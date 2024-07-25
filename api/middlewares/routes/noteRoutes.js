@@ -38,9 +38,11 @@ passport.isAuthenticated(),
     }).catch(e => res.status(500).json({"error":e}))
 });
 
+
 router.post('/create',
 passport.isAuthenticated(),
 (req, res) => {
+  //works for both create and update
   console.log("req body create note", req.body.content)
   
   const noteObj = req.body.content;

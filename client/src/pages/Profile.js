@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useSharedContext } from "../context/SharedContext";
 import { backendAPI } from "../clientDotEnv";
 import { Link } from "react-router-dom";
+import UploadImage from "../components/UploadImage";
 
 const milliSecsToDays = 1000*60*60*24;
 // console.log(JSON.stringify(userHabitsStats))
@@ -17,7 +18,8 @@ export default function Profile (props) {
         });
     }, [navLinks]);
     const [currUser, setCurrUser] = useState(null)
-
+    // const [reloadUser, setReloadUser] = useState(false);
+    const [imgUpload, setImgUpload] = useState(false);
     // const currUser = {
     //     imgSrc: 'https://images.unsplash.com/photo-1615497001839-b0a0eac3274c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8Y3V0ZSUyMGNhdHxlbnwwfHwwfHw%3D&w=1000&q=80',
     //     ...auth.user
@@ -26,13 +28,16 @@ export default function Profile (props) {
         (async() => {
             const user = await fetch(backendAPI+"/api/login", {credentials:"include"});
             setCurrUser({
-                imgSrc: 'https://images.unsplash.com/photo-1615497001839-b0a0eac3274c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8Y3V0ZSUyMGNhdHxlbnwwfHwwfHw%3D&w=1000&q=80',
                 ...(await user.json())
             })
         })();
     }, []);
 
+    // useEffect(() => {
+    //     setTimeout(() => document.querySelector('.profilePicImg').style.background = `url(${backendAPI+"/profileImg?t="+Date.now()})`, 4000); 
+    // }, [imgUpload])
 
+    // const reloadProfileImg = () => proi
     const date = (a=new Date()) => new Date(a);
     console.log(currUser)
     return ( habitInfo && 
@@ -42,12 +47,16 @@ export default function Profile (props) {
             <div className="container text-start">
             <>
                 <div id="about-box">
-                    <img src={currUser.imgSrc} width="200" height="200"/>
+                    <div id="profilePic">
+                        <img async className="profilePicImg" style={{background: `url(${backendAPI+"/profileImg?t="})`}} /*src={backendAPI+"/profileImg"}*/ width="200" height="200" />
+                        <button className="editPic" onClick={() => { setImgUpload(!imgUpload); }} id="profileEdit">{!imgUpload ? 'Change pic ✏️' : 'Cancel change'}</button>
+                    </div>
+                    {imgUpload && <UploadImage />}
+                    {/* <img src={currUser.imgSrc} width="200" height="200"/> */}
                     <h1><strong>Name: </strong>{currUser.name}</h1>
                     <h1><strong>Motto:</strong> {currUser.motto}</h1>
                     <h1><strong>Followers:</strong> {currUser.followers?.map(x => x!=='' && <Link to={"/users/"+x}>@{x}, </Link>)}</h1>
                     <h1><strong>Follows:</strong> {currUser.following?.map(x => x!=='' && <Link to={"/users/"+x}>@{x} </Link>)}</h1>
-
                 </div>
                 <br />
                 <h3><b>Current stats</b></h3>

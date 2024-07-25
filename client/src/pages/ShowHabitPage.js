@@ -14,6 +14,7 @@ let currDate = new Date();
 currDate = currDate.toDateString();
 const randomString = length => Array.from({length}, () => Math.random().toString(36).charAt(2)).join('');
 
+
 const Tick = (props) => {
   return (
   <div className="habitDone mb-1 w-[40px]">
@@ -42,26 +43,92 @@ const calendarStyleAppend = (note) => {
 };
 
 const HabitNote = props => {
-  const {note, owner, experimental, submitNote} = props;
-  const [customDate, setCustomDate] = props.customDate || [null, null];
-  let noteDate = note.date;
+  const { note, experimental, submitNote } = props;
+  const [customDate, setCustomDate] = props.customDate || null;
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedNote, setEditedNote] = useState(note.note);
+  const [readyToSubmit, setReadyToSubmit] = useState(false);
+
+  const noteDate = note.date;
+
+  const editNote = () => {
+    setIsEditing(true);
+  };
+
+  const saveNote = () => {
+    setCustomDate(noteDate);  
+    setReadyToSubmit(true);
+    setIsEditing(false);
+  };
+
+  useEffect(() => {
+    if (readyToSubmit) {
+      console.log("customDate after ready to Submit", customDate)
+      submitNote(); // Call the provided submitNote function, you might want to pass the updated note here
+      setReadyToSubmit(false);
+      setCustomDate("");
+    }
+  }, [customDate, readyToSubmit, submitNote]);
+
   return (
-    new Date().toDateString() !== noteDate ?
-    <>
-      <div className="habitNote_text text-md flex h-[45px] w-full resize-none items-end justify-start border-b-2 border-b-gray-200 focus:outline-none">
-        {note.note}
-      </div>  
-    </>
-    :
-    <>
-      <textarea id="textarea" placeholder="any note for today?" className="habitNote text-md flex h-[45px] w-full resize-none items-end justify-start border-dashed border-b-2 border-b-black focus:outline-none" defaultValue={note.note} ></textarea>
-      {experimental && <input type="date" value={customDate} onChange={e => setCustomDate(e.target.value)} />}
-      <button onClick={submitNote} className="btn btn-primary mt-2 flex">SAVE</button>
-    </>
-  )
+    new Date().toDateString() !== noteDate ? (
+      isEditing ? (
+        <>
+          <textarea
+            id="textarea"
+            placeholder="any note for today?"
+            className="habitNote_textarea text-md flex h-[45px] w-full resize-none items-end justify-start border-dashed border-b-2 border-b-black focus:outline-none"
+            value={editedNote}
+            onChange={e => setEditedNote(e.target.value)}
+          />
+          {experimental && (
+            <input
+              type="date"
+              value={customDate}
+              onChange={e => setCustomDate(e.target.value)}
+            />
+          )}
+          <button onClick={saveNote} className="btn btn-primary mt-2 flex">
+            SAVE
+          </button>
+        </>
+      ) : (
+        <>
+          <div className="habitNote_text text-md flex h-[45px] w-full resize-none items-end justify-start border-b-2 border-b-gray-200 focus:outline-none">
+            {note.note}
+          </div>
+          <div className="editNoteBtn button btn-secondary btn rounded-md p-2">
+            <button onClick={editNote}>EDIT</button>
+          </div>
+        </>
+      )
+    ) : (
+      <>
+        <textarea
+          id="textarea"
+          placeholder="any note for today?"
+          className="habitNote_textarea text-md flex h-[45px] w-full resize-none items-end justify-start border-dashed border-b-2 border-b-black focus:outline-none"
+          defaultValue={note.note}
+        />
+        {experimental && (
+          <input
+            type="date"
+            value={customDate}
+            onChange={e => setCustomDate(e.target.value)}
+          />
+        )}
+        <button onClick={submitNote} className="btn btn-primary mt-2 flex">
+          SAVE
+        </button>
+      </>
+    )
+  );
 };
 
 
+
+
+ 
  function ShowHabitPage(props){
   const navigate = useNavigate();
   const params = useParams();
@@ -81,15 +148,22 @@ const HabitNote = props => {
 
   const [currHabit, setCurrHabit] = useState({makeHabit:'1'});
   
+  const [currTextAreaVal, setCurrTextAreaVal] = useState('');
   
   const [customDate, setCustomDate] = useState("");
 
   const [calendarVal, calendarChange] = useState(new Date());
 
 
+  // useEffect(() => {
+  //   let ta = document.querySelector('.habitNote_textarea')
+  //   if(document.querySelector('.habitNote_textarea') === null) return;
+    // setCurrTextAreaVal(ta.value)
+  // }, [document.querySelector('.habitNote_textarea')?.value]);
+
   useEffect(() => {
     const date = calendarVal.toDateString();
-    let dateIsLogged = false;
+    let dateIsLogged = false
     notes.forEach(x => {
       if(x.date === date) dateIsLogged = true;
     });
@@ -144,17 +218,12 @@ const HabitNote = props => {
   
 let c = 0;
 
-// useEffect(() => {
-//   console.log(noteObj, "new habit uf", c++)
-// }, [noteObj.note, noteObj.tick]);
-
 const [saveStatus, setSaveStatus] = useState(false);
 const logDay = (state, habitDate) => {
   if(habitDate !== currDate) return
   let markedDone = state === "tick"; 
   saveNote();
  
-  // if(props.id == "today") habit = noteObj; 
 
   const saveStatus = () => {
     if(noteObj.done === undefined || noteObj.done && !markedDone || !noteObj.done && markedDone){
@@ -166,21 +235,9 @@ const logDay = (state, habitDate) => {
   saveStatus();
 };
 
-const updateNoteDB = async () => {
 
-  //this is the client side logic
-  // const currNoteInx = currHabit.notes.findIndex(x => x.date === noteObj.date);
-  // const newHabit = currHabit;
-  // if(currNoteInx == -1){
-  //   newHabit.notes.push(noteObj);
-  // }else{
-  //   newHabit.notes[currNoteInx] = noteObj;
-  // }
-  // console.log("new Habit will be", currHabit.notes[currNoteInx], newHabit);
-  // console.log("new habit navlink", navLinks )  
-  // habitService.updateHabit(currHabit.habitId, newHabit); //calling server logic
+const updateNoteDB = async () => {
   console.log("noteObj updating", noteObj);
-  if(customDate !== "") noteObj.date = new Date(customDate).toDateString();
   const resp = await habitService.createNote(noteObj, currHabit.makeHabit)
   if(resp.ok){
     setReloadNotes(true)
@@ -191,10 +248,16 @@ const updateNoteDB = async () => {
 
 
 const saveNote = () => {
-  setNoteObj(noteObj => ({...noteObj, "note": document.querySelector('#textarea').value}));
+  let date= customDate === '' ? new Date(customDate).toDateString() : customDate
+  console.log(date, "==date")
+  console.log(document.getElementById(date),document.getElementById(date)?.querySelector('textarea')?.value, "textarea value");
+  setNoteObj(noteObj => ({...noteObj,
+     "date": date,    
+    "note": document.getElementById(date)?.querySelector('textarea')?.value}));
   console.log("new Habit saveNOte", noteObj);
 }
 const submitNote = () => {
+  console.log("customDate in submitNote", customDate)
   saveNote();
   setSaveStatus(true);
 }
@@ -230,11 +293,12 @@ const HabitElem = props => {
   const todaysNote = props.id == "today";
   let today = false;
   if(todaysNote){
-    habit = noteObj;
+    habit = noteObj
     today=true;
   }
 
   console.log(habit, "habitelem habit", currHabit.makeHabit)
+ 
 
   return (
     <>
@@ -264,6 +328,12 @@ const HabitElem = props => {
 };
 
 let calstyle= '';
+// const imageUpload = () => {
+//   fetch('/imageUpload', {
+//     method: 'POST',
+//     body: document.querySelector('#imgFile')
+//   })
+// }
 const daysRemaining = (Math.floor(((new Date(currHabit.dueDate)) - (new Date()))/ (1000 * 60 * 60 * 24)));
 
   return (   

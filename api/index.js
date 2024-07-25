@@ -16,6 +16,8 @@ const commentRoutes = require("./middlewares/routes/commentRoutes");
 
 const mongoose = require("mongoose");
 const randomString = () => Array.from({length:10}, () => Math.random().toString(36).charAt(2)).join('');
+const multer = require("multer");
+
 
 require('dotenv').config();
 
@@ -36,6 +38,7 @@ mongoose.connect(process.env.MONGODB_URI)
 const cors = require('cors');
 const Users = require("./models/User");
 const Habit = require("./models/Habit");
+const Image = require("./models/Image");
 
 app.use(cors({
     origin: ["http://localhost:3000", /*"http://"+os.networkInterfaces()['en0'][1].address+":3000"*/],
@@ -149,6 +152,62 @@ app.get('/api/login',
       res.sendStatus(401);
     }
 });
+
+// const Storage = multer.diskStorage({
+//   destination: "imgUplaods",
+//   fileName: (req, file, cb) => {
+//     cb(null, file.originalname);
+//   }
+// });
+const Storage = multer.memoryStorage({
+    destination: "imgUplaods",
+    fileName: (req, file, cb) => {
+      cb(null, file.originalname);
+    }
+});
+
+
+const upload = multer({storage: Storage}).single("img");
+app.post('/imageUpload', passport.isAuthenticated(), (req, res) => {
+  upload(req, res, (err) => {
+    console.log("filemula", req.file)
+    if(req.file === undefined || req.file.size < 100 || req.file.size > 7*10^6) {
+      res.status(500).json({error:'no file'});
+      return;
+    }
+    if (err) {
+      return res.status(500).json({ error: err });
+    }
+
+    const imageData = {
+      data: req.file.buffer,
+      contentType: req.file.mimetype || 'image/png'
+    };
+
+    Image.findOneAndUpdate(
+      { userId: req.session.passport.user }, // Filter
+      { $set: { image: imageData } }, // Update
+      { new: true, upsert: true } // Options: return the updated document, create if not exists
+    )
+    .then(r => res.status(200).json({"file":"uploaded"}))
+    .catch(e => res.status(500).json({ error: e }));
+  });
+});
+
+app.get('/profileImg', (req, res) => {
+  Image.findOne({ userId: req.session.passport.user }, { _id: 0 }).then(a => {
+    if (a && a.image && a.image.data) {
+      res.setHeader('Content-Type', a.image.contentType);
+      res.status(200).send(a.image.data);
+    } else {
+      res.status(404).send('Image not found');
+    }
+  }).catch(err => {
+    res.status(500).send('Internal Server Error');
+  });
+});
+
+
 
 app.post('/api/logout', 
   passport.isAuthenticated(),

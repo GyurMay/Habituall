@@ -290,3 +290,35 @@ ul[id="allList"] li {
   white-space: preserve;
   text-align: initial !important;
 }
+.editPic{
+  position: absolute;
+  z-index: 2;
+  background: black;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  display: none; 
+  transition-delay: 1s;
+  transition: all ease-in-out 0.3s;
+}
+
+.profilePicImg{
+  position: absolute;
+  z-index: 1;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+#profilePic{
+   position: relative;
+  width: 200px; 
+  height: 200px;
+  border: 1px solid #000;
+}
+#profilePic:hover > .editPic{
+    display: block;
+  transform: translate(-50%,-50%);
+}
+.editNoteBtn{
+  
+}
